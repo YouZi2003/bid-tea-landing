@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="format-detection" content="telephone=yes">
+<title>标书咨询 · 茶位预定</title>
+<style>
+:root{
+  --ink:#1f2937; --ink2:#6b7280; --line:#e5e7eb;
+  --blue:#2563eb; --blue-bg:#eff6ff; --blue-line:#bfdbfe;
+  --tea:#0d9488; --tea-bg:#f0fdfa; --tea-line:#99f6e4;
+  --gold:#b45309; --bg:#f7f8fa; --card:#ffffff;
+  --radius:18px; --shadow:0 4px 20px rgba(31,41,55,.06);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  background:linear-gradient(180deg,#eef2f7 0%,var(--bg) 240px);
+  color:var(--ink);min-height:100vh;padding:0 16px calc(28px + env(safe-area-inset-bottom));
+}
+/* ===== 头部 ===== */
+header{padding:34px 6px 22px;text-align:center}
+.logo{
+  width:64px;height:64px;margin:0 auto 14px;border-radius:20px;
+  background:linear-gradient(135deg,var(--blue),var(--tea));
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 24px rgba(37,99,235,.25);
+}
+.logo svg{width:34px;height:34px}
+header h1{font-size:21px;letter-spacing:.5px}
+header p{font-size:13px;color:var(--ink2);margin-top:6px}
+/* ===== 双入口卡片 ===== */
+.entries{display:flex;flex-direction:column;gap:14px;margin-top:6px}
+.entry{
+  background:var(--card);border-radius:var(--radius);padding:22px 20px;
+  display:flex;align-items:center;gap:16px;cursor:pointer;
+  box-shadow:var(--shadow);border:1px solid var(--line);
+  transition:transform .15s ease,box-shadow .15s ease;position:relative;overflow:hidden;
+}
+.entry:active{transform:scale(.98)}
+.entry .icon{
+  width:54px;height:54px;border-radius:16px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.entry .icon svg{width:28px;height:28px}
+.entry-bid .icon{background:var(--blue-bg);border:1px solid var(--blue-line)}
+.entry-tea .icon{background:var(--tea-bg);border:1px solid var(--tea-line)}
+.entry h2{font-size:17px;display:flex;align-items:center;gap:8px}
+.entry p{font-size:12.5px;color:var(--ink2);margin-top:5px;line-height:1.5}
+.entry .arrow{margin-left:auto;color:#c4c9d4;font-size:20px;font-family:serif}
+.entry-bid{border-left:4px solid var(--blue)}
+.entry-tea{border-left:4px solid var(--tea)}
+.tag{font-size:10.5px;padding:2.5px 8px;border-radius:99px;font-weight:500}
+.tag-blue{background:var(--blue-bg);color:var(--blue)}
+.tag-tea{background:var(--tea-bg);color:var(--tea)}
+/* ===== 面板 ===== */
+.panel{
+  background:var(--card);border-radius:var(--radius);border:1px solid var(--line);
+  box-shadow:var(--shadow);margin-top:14px;overflow:hidden;
+  animation:slideIn .25s ease;
+}
+@keyframes slideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.panel-head{
+  padding:15px 18px;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;font-size:15px;font-weight:600;
+}
+.panel-head .close{color:#9ca3af;font-size:20px;padding:2px 8px;cursor:pointer}
+.panel-body{padding:18px}
+/* 标书咨询面板 */
+.wxa-box{text-align:center;padding:6px 0 4px}
+.wxa-box img{
+  width:170px;height:170px;border-radius:12px;border:1px solid var(--line);
+  background:#fafafa;object-fit:cover;
+}
+.wxa-box .tip{font-size:12.5px;color:var(--ink2);margin-top:10px;line-height:1.6}
+.wxa-box .tip b{color:var(--ink)}
+.contact-row{display:flex;gap:10px;margin-top:16px}
+.btn{
+  flex:1;border:none;border-radius:12px;padding:13px 0;font-size:14.5px;
+  display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;
+  transition:transform .12s ease;font-weight:500;
+}
+.btn:active{transform:scale(.97)}
+.btn svg{width:16px;height:16px}
+.btn-outline{background:#fff;border:1.5px solid var(--line);color:var(--ink)}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-tea{background:var(--tea);color:#fff}
+/* ===== 表单 ===== */
+.field{margin-bottom:15px}
+.field label{display:block;font-size:13px;color:var(--ink2);margin-bottom:7px}
+.field label .req{color:#ef4444;margin-left:2px}
+.input,.select,textarea{
+  width:100%;border:1.5px solid var(--line);border-radius:12px;
+  padding:12px 14px;font-size:15px;background:#fafbfc;color:var(--ink);
+  font-family:inherit;outline:none;transition:border-color .15s;
+  -webkit-appearance:none;appearance:none;
+}
+.input:focus,.select:focus,textarea:focus{border-color:var(--tea);background:#fff}
+textarea{resize:none;min-height:66px}
+.row2{display:flex;gap:10px}
+.row2 .field{flex:1}
+.select-wrap{position:relative}
+.select-wrap::after{
+  content:"";position:absolute;right:14px;top:50%;margin-top:-2px;
+  border:5px solid transparent;border-top-color:#9ca3af;pointer-events:none;
+}
+/* 时段/座位 选项 */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{
+  padding:9px 15px;border-radius:99px;border:1.5px solid var(--line);
+  font-size:13.5px;background:#fff;cursor:pointer;color:var(--ink2);
+  transition:all .12s;user-select:none;
+}
+.chip.on{background:var(--tea-bg);border-color:var(--tea);color:var(--tea);font-weight:600}
+/* 人数步进器 */
+.stepper{display:flex;align-items:center;gap:0;border:1.5px solid var(--line);border-radius:12px;overflow:hidden;width:fit-content}
+.stepper button{
+  width:44px;height:44px;border:none;background:#fafbfc;font-size:20px;
+  color:var(--tea);cursor:pointer;
+}
+.stepper button:disabled{color:#d1d5db}
+.stepper .val{width:56px;text-align:center;font-size:16px;font-weight:600}
+/* 成功页 */
+.success{text-align:center;padding:26px 10px 10px}
+.success .ok{
+  width:66px;height:66px;margin:0 auto 16px;border-radius:50%;
+  background:var(--tea-bg);display:flex;align-items:center;justify-content:center;
+  border:2px solid var(--tea-line);
+}
+.success .ok svg{width:32px;height:32px}
+.success h3{font-size:18px}
+.success .bno{
+  display:inline-block;margin:12px 0;padding:7px 16px;border-radius:99px;
+  background:var(--tea-bg);color:var(--tea);font-size:13.5px;letter-spacing:1px;font-weight:600;
+}
+.success p{font-size:13px;color:var(--ink2);line-height:1.7}
+.success .actions{display:flex;gap:10px;margin-top:20px}
+/* 历史记录 */
+.history-item{
+  border:1px solid var(--line);border-radius:12px;padding:12px 14px;
+  margin-bottom:10px;font-size:13px;line-height:1.7;background:#fafbfc;
+  display:flex;justify-content:space-between;align-items:center;gap:8px;
+}
+.history-item .del{color:#9ca3af;font-size:16px;cursor:pointer;padding:4px}
+.empty{text-align:center;color:#b0b6c0;font-size:13px;padding:20px 0}
+/* toast */
+#toast{
+  position:fixed;left:50%;bottom:90px;transform:translateX(-50%) translateY(20px);
+  background:rgba(17,24,39,.88);color:#fff;padding:10px 20px;border-radius:99px;
+  font-size:13.5px;opacity:0;pointer-events:none;transition:all .25s;max-width:80vw;
+  z-index:99;
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+footer{text-align:center;font-size:11.5px;color:#b0b6c0;padding-top:26px;line-height:1.8}
+.hidden{display:none !important}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+  </div>
+  <h1>欢迎光临</h1>
+  <p>请选择您需要的服务</p>
+</header>
+
+<div class="entries">
+  <!-- 标书咨询 -->
+  <div class="entry entry-bid" onclick="tapBid()">
+    <div class="icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+    </div>
+    <div>
+      <h2>标书咨询 <span class="tag tag-blue">筑标慧小程序</span></h2>
+      <p>投标方案 · 标书编制 · 政策解读<br>专业团队在线答疑</p>
+    </div>
+    <span class="arrow">›</span>
+  </div>
+
+  <!-- 茶位预定 -->
+  <div class="entry entry-tea" onclick="tapTea()">
+    <div class="icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+    </div>
+    <div>
+      <h2>茶位预定 <span class="tag tag-tea">即订即坐</span></h2>
+      <p>大厅卡座 · 包厢雅间 · 窗边茶席<br>到店免排队，一键留位</p>
+    </div>
+    <span class="arrow">›</span>
+  </div>
+</div>
+
+<!-- ============ 标书咨询面板 ============ -->
+<div id="panel-bid" class="panel hidden">
+  <div class="panel-head">标书咨询<span class="close" onclick="hidePanels()">✕</span></div>
+  <div class="panel-body">
+    <div class="wxa-box">
+      <img id="wxaCode" src="wxa-code.png" alt="小程序码" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'wxa-ph',style:'width:170px;height:170px;border-radius:12px;border:1.5px dashed #d1d5db;display:flex;align-items:center;justify-content:center;color:#9ca3af;font-size:12px;text-align:center;line-height:1.6;padding:12px',textContent:'请放置小程序码图片\\n(文件名 wxa-code.png)'}))">
+      <div class="tip"><b>长按上方小程序码</b>，识别进入「筑标慧」小程序<br>在线咨询标书编制相关问题</div>
+    </div>
+    <div class="contact-row">
+      <button class="btn btn-outline" onclick="callPhone()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        电话咨询
+      </button>
+      <button class="btn btn-primary" onclick="copyWechat()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        加微信咨询
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 茶位预定面板 ============ -->
+<div id="panel-tea" class="panel hidden">
+  <div class="panel-head"><span id="teaTitle">茶位预定</span><span class="close" onclick="teaBack()">✕</span></div>
+
+  <!-- 表单 -->
+  <div id="teaForm" class="panel-body">
+    <div class="row2">
+      <div class="field">
+        <label>姓名<span class="req">*</span></label>
+        <input class="input" id="f-name" type="text" placeholder="您的称呼" maxlength="12">
+      </div>
+      <div class="field">
+        <label>手机号<span class="req">*</span></label>
+        <input class="input" id="f-phone" type="tel" placeholder="用于确认预约" maxlength="11">
+      </div>
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label>日期<span class="req">*</span></label>
+        <input class="input" id="f-date" type="date">
+      </div>
+      <div class="field">
+        <label>人数<span class="req">*</span></label>
+        <div class="stepper">
+          <button type="button" onclick="stepPeople(-1)">−</button>
+          <span class="val" id="f-people">2</span>
+          <button type="button" onclick="stepPeople(1)">＋</button>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label>时段<span class="req">*</span></label>
+      <div class="chips" id="f-time">
+        <span class="chip" onclick="pickChip(this)">上午 09:00-12:00</span>
+        <span class="chip" onclick="pickChip(this)">下午 13:00-17:00</span>
+        <span class="chip" onclick="pickChip(this)">晚上 18:00-22:00</span>
+      </div>
+    </div>
+    <div class="field">
+      <label>座位类型</label>
+      <div class="chips" id="f-seat">
+        <span class="chip" onclick="pickChip(this)">大厅卡座</span>
+        <span class="chip" onclick="pickChip(this)">包厢雅间</span>
+        <span class="chip" onclick="pickChip(this)">窗边茶席</span>
+      </div>
+    </div>
+    <div class="field">
+      <label>备注</label>
+      <textarea id="f-note" placeholder="茶品偏好、商谈事宜等（选填）"></textarea>
+    </div>
+    <button class="btn btn-tea" style="width:100%" onclick="submitTea()">提交预定</button>
+    <div style="text-align:center;margin-top:14px">
+      <span style="font-size:12.5px;color:var(--tea);cursor:pointer" onclick="showHistory()">查看我的预定记录</span>
+    </div>
+  </div>
+
+  <!-- 成功 -->
+  <div id="teaSuccess" class="panel-body hidden">
+    <div class="success">
+      <div class="ok">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h3>预定成功，期待您的光临</h3>
+      <div class="bno" id="bookNo"></div>
+      <p id="bookSummary"></p>
+      <p style="margin-top:8px">到店出示预定号即可；如有变动请致电改期</p>
+      <div class="actions">
+        <button class="btn btn-outline" onclick="callPhone()">致电商家</button>
+        <button class="btn btn-tea" onclick="copyBooking()">复制预定信息</button>
+      </div>
+      <div class="actions" style="margin-top:0">
+        <button class="btn btn-outline" style="flex:1" onclick="resetTeaForm()">再预定一单</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 历史 -->
+  <div id="teaHistory" class="panel-body hidden">
+    <div id="historyList"></div>
+    <div class="actions" style="margin-top:6px">
+      <button class="btn btn-outline" style="flex:1" onclick="backToForm()">返回预定</button>
+    </div>
+  </div>
+</div>
+
+<footer id="footNote"></footer>
+<div id="toast"></div>
+
+<script>
+/* ================================================================
+   ★★★ 配置区：商家信息（部署前修改这里） ★★★
+   ================================================================ */
+const CONFIG = {
+  businessName : "茶叙·标书工作坊",          // 店名/公司名
+  phone        : "13800000000",              // 咨询/预定电话
+  wechat       : "bid-tea-888",              // 微信号（复制用）
+  wxaImage     : "wxa-code.png",             // 小程序码图片（兜底用）
+
+  /* ---- 标书咨询：筑标慧小程序 ---- */
+  bidAppid     : "wx09019cc04e4a7e41",                     // 小程序AppID（已从桌面快捷方式提取）
+  bidPcProto   : "weixin://launchapplet/?app_id=wx09019cc04e4a7e41",  // 电脑端微信直跳协议（已配置）
+  bidJumpUrl   : "",   // ★手机端直跳需填 URL Link，从小程序后台「获取小程序链接」生成后填这里
+                       // 形如 https://wxaurl.cn/xxxxxx，填好后手机点击直接进小程序
+
+  /* ---- 茶位预定：进入店铺 ----
+     teaMode = "form"  用本页内置预定表单
+     teaMode = "link"  跳转到店铺外部链接（店铺小程序/收银系统/美团等） */
+  teaMode      : "form",
+  teaLink      : "",
+};
+
+/* ---------- 初始化 ---------- */
+const $ = id => document.getElementById(id);
+$("footNote").innerHTML = CONFIG.businessName + "<br>营业时间 09:00 - 22:00";
+const today = new Date();
+const dstr = d => d.toISOString().slice(0,10);
+$("f-date").min = dstr(today);
+$("f-date").value = dstr(today);
+
+/* ---------- 入口点击 ---------- */
+function tapBid(){
+  // ① 已配置手机端 URL Link → 直接跳转（微信内外均适用，最佳体验）
+  if(CONFIG.bidJumpUrl){
+    location.href = CONFIG.bidJumpUrl;
+    return;
+  }
+  // ② 电脑端微信浏览器 → 用小程序启动协议直跳筑标慧
+  const isPC = /Windows|Macintosh/.test(navigator.userAgent);
+  const inWeixin = /MicroMessenger/i.test(navigator.userAgent);
+  if(isPC && inWeixin && CONFIG.bidPcProto){
+    location.href = CONFIG.bidPcProto;
+    return;
+  }
+  // ③ 手机端（未配置URL Link）→ 展示筑标慧小程序码，长按识别进入
+  showPanel("bid");
+}
+function tapTea(){
+  // 店铺用外部链接预定 → 直接跳转
+  if(CONFIG.teaMode === "link" && CONFIG.teaLink){
+    location.href = CONFIG.teaLink;
+    return;
+  }
+  // 默认：本页内置预定表单
+  showPanel("tea");
+}
+
+/* ---------- 面板切换 ---------- */
+function showPanel(k){
+  hidePanels();
+  $("panel-"+k).classList.remove("hidden");
+  $("panel-"+k).scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function hidePanels(){ document.querySelectorAll(".panel").forEach(p=>p.classList.add("hidden")); }
+function teaBack(){
+  if(!$("teaSuccess").classList.contains("hidden") || !$("teaHistory").classList.contains("hidden")){
+    resetTeaForm(); return;
+  }
+  hidePanels();
+}
+function backToForm(){
+  $("teaHistory").classList.add("hidden");
+  $("teaSuccess").classList.add("hidden");
+  $("teaForm").classList.remove("hidden");
+  $("teaTitle").textContent = "茶位预定";
+}
+
+/* ---------- 标书咨询 ---------- */
+function callPhone(){ location.href = "tel:" + CONFIG.phone; }
+function copyWechat(){
+  copyText(CONFIG.wechat, "已复制微信号 " + CONFIG.wechat + "，请在微信添加好友");
+}
+function copyText(t, msg){
+  const done = () => toast(msg || "已复制");
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(done).catch(()=>fallbackCopy(t,done));
+  } else fallbackCopy(t, done);
+}
+function fallbackCopy(t, done){
+  const ta = document.createElement("textarea");
+  ta.value = t; ta.style.position="fixed"; ta.style.opacity="0";
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand("copy"); done(); }catch(e){ toast("复制失败，请手动记录：" + t); }
+  ta.remove();
+}
+
+/* ---------- 表单交互 ---------- */
+function pickChip(el){
+  const box = el.parentElement;
+  box.querySelectorAll(".chip").forEach(c=>c.classList.remove("on"));
+  el.classList.add("on");
+}
+function stepPeople(d){
+  const el = $("f-people");
+  let v = parseInt(el.textContent) + d;
+  v = Math.max(1, Math.min(20, v));
+  el.textContent = v;
+}
+function getPick(id){
+  const on = $(id).querySelector(".chip.on");
+  return on ? on.textContent.trim() : "";
+}
+
+/* ---------- 提交预定 ---------- */
+let lastBooking = null;
+function submitTea(){
+  const name = $("f-name").value.trim();
+  const phone = $("f-phone").value.trim();
+  const date = $("f-date").value;
+  const time = getPick("f-time");
+  const seat = getPick("f-seat") || "不限";
+  const note = $("f-note").value.trim();
+  const people = $("f-people").textContent;
+
+  if(!name) return toast("请填写您的称呼");
+  if(!/^1\d{10}$/.test(phone)) return toast("请填写正确的11位手机号");
+  if(!date) return toast("请选择预定日期");
+  if(!time) return toast("请选择预定时段");
+
+  const no = "CL" + date.replace(/-/g,"") + String(Math.floor(Math.random()*900)+100);
+  const rec = {no, name, phone, date, time, seat, people, note, created:new Date().toLocaleString("zh-CN")};
+  lastBooking = rec;
+
+  const list = JSON.parse(localStorage.getItem("teaBookings")||"[]");
+  list.unshift(rec);
+  localStorage.setItem("teaBookings", JSON.stringify(list.slice(0,50)));
+
+  $("bookNo").textContent = "预定号 " + no;
+  $("bookSummary").innerHTML = date + " · " + time.split(" ")[0] + " · " + people + "人 · " + seat;
+  $("teaForm").classList.add("hidden");
+  $("teaSuccess").classList.remove("hidden");
+  $("teaTitle").textContent = "预定成功";
+}
+function copyBooking(){
+  if(!lastBooking) return;
+  const b = lastBooking;
+  const txt = "【茶位预定】\n预定号：" + b.no + "\n姓名：" + b.name + "\n手机：" + b.phone +
+    "\n日期：" + b.date + "\n时段：" + b.time + "\n人数：" + b.people + "人\n座位：" + b.seat +
+    (b.note ? "\n备注：" + b.note : "") + "\n——" + CONFIG.businessName;
+  copyText(txt, "预定信息已复制，可发送给商家微信确认");
+}
+function resetTeaForm(){
+  $("teaSuccess").classList.add("hidden");
+  $("teaHistory").classList.add("hidden");
+  $("teaForm").classList.remove("hidden");
+  $("teaTitle").textContent = "茶位预定";
+  $("f-name").value=""; $("f-phone").value=""; $("f-note").value="";
+  $("f-people").textContent="2";
+  $("f-time").querySelectorAll(".chip").forEach(c=>c.classList.remove("on"));
+  $("f-seat").querySelectorAll(".chip").forEach(c=>c.classList.remove("on"));
+}
+
+/* ---------- 历史记录 ---------- */
+function showHistory(){
+  const list = JSON.parse(localStorage.getItem("teaBookings")||"[]");
+  const box = $("historyList");
+  if(!list.length){
+    box.innerHTML = '<div class="empty">暂无预定记录</div>';
+  } else {
+    box.innerHTML = list.map((b,i)=>`
+      <div class="history-item">
+        <div>
+          <b>${b.no}</b><br>
+          ${b.date} ${b.time.split(" ")[0]} · ${b.people}人 · ${b.seat}<br>
+          <span style="color:var(--ink2)">${b.name} ${b.phone.slice(0,3)}****${b.phone.slice(7)}</span>
+        </div>
+        <span class="del" onclick="delBooking(${i})">🗑</span>
+      </div>`).join("");
+  }
+  $("teaForm").classList.add("hidden");
+  $("teaSuccess").classList.add("hidden");
+  $("teaHistory").classList.remove("hidden");
+  $("teaTitle").textContent = "我的预定";
+}
+function delBooking(i){
+  const list = JSON.parse(localStorage.getItem("teaBookings")||"[]");
+  list.splice(i,1);
+  localStorage.setItem("teaBookings", JSON.stringify(list));
+  showHistory(); toast("已删除");
+}
+
+/* ---------- toast ---------- */
+let toastTimer;
+function toast(msg){
+  const t = $("toast");
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove("show"), 2200);
+}
+</script>
+</body>
+</html>
